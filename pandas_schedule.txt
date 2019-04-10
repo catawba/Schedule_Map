@@ -1,0 +1,28 @@
+#Schedule with Pandas and Map Coloring
+from tinydb import TinyDB, Query
+
+# Pandas
+import numpy as np
+import pandas as pd
+
+db = TinyDB('conflict.json')
+
+# load data from an excel file
+filename = "Schedule_Data.xlsx"
+df = pd.read_excel(filename)
+
+
+# get the class ids and names for conflicts
+for n in df.iloc[:0]:
+    print(n+"--------")
+    conflict_list = []
+    for k in enumerate(df.values[0]):
+        if k[1] == 1 or k[1] == 'x':
+            conflict_list.append(df.columns.values[k[0]])
+            #print(df.columns.values[k[0]])
+    db.insert({'class_name':n,'conflicts':conflict_list})
+    print(conflict_list)
+
+
+db.close()    
+
