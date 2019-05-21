@@ -6,23 +6,26 @@ import numpy as np
 import pandas as pd
 
 db = TinyDB('conflict.json')
+db.purge()
 
 # load data from an excel file
-filename = "Schedule_Data.xlsx"
+#filename = "Schedule_Data.xlsx"
+filename = "Schedule2019work.xlsx"
 df = pd.read_excel(filename)
 
-
 # get the class ids and names for conflicts
-for n in df.iloc[:0]:
-    print(n+"--------")
+namelist = list(df.columns)
+for n in enumerate(df.iloc[:0]):
+    c_list = list(enumerate(df.iloc[n[0]]))
     conflict_list = []
-    for k in enumerate(df.values[0]):
-        if k[1] == 1 or k[1] == 'x':
-            conflict_list.append(df.columns.values[k[0]])
-            #print(df.columns.values[k[0]])
-    db.insert({'class_name':n,'conflicts':conflict_list})
-    print(conflict_list)
+    for k in enumerate(c_list):
+        if k[1][1] == 1:
+            conflict_list.append(namelist[k[0]])
+              
+    db.insert({'class_name':n[1],'class_color':'none','conflicts':conflict_list,'conflict_num':len(conflict_list)})
 
+for item in db:
+    print(item)
 
 db.close()    
 
